@@ -26,7 +26,7 @@ const WebhookTester = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/transactions/webhook/status-update",
+        "https://school-payment-dashboard-nine.vercel.app/transactions/webhook/status-update",
         payload
       );
       setResponseMessage(`Success: ${response.data.message}`);
