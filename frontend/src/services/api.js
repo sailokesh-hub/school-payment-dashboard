@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:3001" });
+const API = axios.create({ baseURL: "https://school-payment-dashboard-fswcozdeh-sailokesh-hubs-projects.vercel.app" });
 
 export const fetchTransactions = async (params) => {
   const queryParams = new URLSearchParams(params).toString();
