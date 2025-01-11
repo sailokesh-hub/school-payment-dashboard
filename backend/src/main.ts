@@ -12,7 +12,7 @@ async function bootstrap() {
 
   // Enable CORS with "*" to allow all origins
   app.enableCors({
-    origin: '*',
+    origin: '*', // Change this to your actual frontend URL if needed
     methods: 'GET, POST, PUT, DELETE, PATCH',
     credentials: true,
   });
@@ -24,7 +24,7 @@ async function bootstrap() {
   return serverless(app.getHttpAdapter().getInstance());
 }
 
-// Export a handler function for Vercel
+// Export the handler for Vercel
 module.exports.handler = async (event, context) => {
   const handler = await bootstrap();
   return handler(event, context);
