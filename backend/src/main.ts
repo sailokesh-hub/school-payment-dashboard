@@ -1,31 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
-import * as serverless from 'serverless-http';
+import { MigrateTransactions } from './migrations/migrate-transactions'; // Import migration service
 
 async function bootstrap() {
-  const server = express(); // Create an Express application instance
-
-  // Create the NestJS application using the Express adapter
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-
-  // Enable CORS with "*" to allow all origins
+  const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: '*', // Change this to your actual frontend URL if needed
-    methods: 'GET, POST, PUT, DELETE, PATCH',
-    credentials: true,
+    origin: '*'
   });
 
-  // Initialize the NestJS app
-  await app.init();
+  await app.listen(process.env.PORT ?? 3001);
 
-  // Return the serverless handler
-  return serverless(app.getHttpAdapter().getInstance());
+  // // Run the migration
+  // const migrateTransactions = app.get(MigrateTransactions);
+  // await migrateTransactions.migrate();
+
+  // await app.close(); // Close the app after migration
 }
-
-// Export the handler for Vercel
-module.exports.handler = async (event, context) => {
-  const handler = await bootstrap();
-  return handler(event, context);
-};
+bootstrap();
