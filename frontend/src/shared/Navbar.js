@@ -6,7 +6,8 @@ const Navbar = () => {
   return (
     <nav className="bg-[#898af7] dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-md p-3">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-lg font-semibold ">School Payments Dashboard</h1>
+        <Link to="/"><h1 className="text-lg font-semibold ">School Payments Dashboard</h1></Link>
+
         <div className="space-x-6 flex items-center">
           <Link
             to="/transactions"
