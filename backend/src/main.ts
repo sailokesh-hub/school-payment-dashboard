@@ -1,19 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MigrateTransactions } from './migrations/migrate-transactions'; // Import migration service
+import * as serverless from 'serverless-http';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import * as express from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // Create an Express app (required by serverless-http)
+  const expressApp = express();
+
+  // Create a NestJS application with the Express adapter
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+
+  // Enable CORS for your frontend if needed
   app.enableCors({
-    origin: '*', 
+    origin: 'https://school-payment-dashboard-phi.vercel.app', // Your frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   });
 
-  await app.listen(process.env.PORT ?? 3001);
+  // Initialize the NestJS app
+  await app.init();
 
-  // // Run the migration
-  // const migrateTransactions = app.get(MigrateTransactions);
-  // await migrateTransactions.migrate();
-
-  // await app.close(); // Close the app after migration
+  // Return the serverless handler wrapped with the Express app
+  return serverless(expressApp); // Wrap the Express app with serverless-http
 }
-bootstrap();
+
+// Export the handler function
+export const handler = bootstrap(); 
