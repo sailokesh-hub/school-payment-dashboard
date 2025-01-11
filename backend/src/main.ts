@@ -20,11 +20,10 @@ async function bootstrap() {
   // Initialize the NestJS app
   await app.init();
 
-  // Return the serverless handler
   return serverless(app.getHttpAdapter().getInstance());
 }
 
-// Export handler for Vercel
+// Handle the serverless request and return the response
 module.exports.handler = async (event, context) => {
   const handler = await bootstrap();
   return handler(event, context);
