@@ -13,9 +13,7 @@ async function bootstrap() {
 
   // Enable CORS for your frontend if needed
   app.enableCors({
-    origin: 'https://school-payment-dashboard-phi.vercel.app', // Your frontend URL
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    origin: '*',
   });
 
   // Initialize the NestJS app
