@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Transaction } from './schemas/transaction.schema'; // Import Transaction schema
@@ -63,5 +63,42 @@ export class TransactionsService {
       page,
       limit,
     };
+  }
+
+  async checkStatus(customOrderId: string) {
+    const transaction = await this.transactionModel.findOne({ custom_order_id: customOrderId });
+    if (!transaction) {
+      throw new NotFoundException('Transaction not found');
+    }
+    return transaction;
+  }
+
+  async handleWebhookPayload(payload: any) {
+    if (!payload || !payload.order_info || !payload.order_info.order_id) {
+      return { status: 400, message: 'Invalid payload' };
+    }
+
+    const { order_info } = payload;
+    const { order_id, order_amount, transaction_amount, gateway, bank_reference } = order_info;
+
+    const transaction = await this.transactionModel.findOneAndUpdate(
+      { _id: order_id }, // Assuming `order_id` maps to `collect_id` or `_id` in Transaction schema
+      {
+        $set: {
+          order_amount,
+          transaction_amount,
+          gateway,
+          bank_reference,
+          status: payload.status === 200 ? 'SUCCESS' : 'FAILED',
+        },
+      },
+      { new: true, upsert: false } // Don't create new records; only update existing ones
+    );
+
+    if (transaction) {
+      return { status: 200, message: 'Transaction updated successfully', transaction };
+    } else {
+      return { status: 404, message: 'Transaction not found' };
+    }
   }
 }

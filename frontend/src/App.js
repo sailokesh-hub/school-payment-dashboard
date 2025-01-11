@@ -7,6 +7,7 @@ import SchoolDetails from "./pages/SchoolDetails";
 import StatusCheck from "./pages/StatusCheck";
 import TransactionDetailsBySchool from "./components/TransactionDetailsBySchool";
 import TransactionStatusCheck from "./components/TransactionStatusCheck";
+import WebhookTester from "./components/WebhookTester";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/transactions" element={<Dashboard />} />
             <Route path="/school-details" element={<TransactionDetailsBySchool />} />
             <Route path="/transactions/status-check" element={<TransactionStatusCheck />} />
+            <Route path="/custompayload" element={<WebhookTester />} />
           </Routes>
         </div>
         <Footer />

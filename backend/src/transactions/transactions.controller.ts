@@ -1,4 +1,5 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query , Post, Body,HttpException,
+  HttpStatus,} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 
 @Controller('transactions')
@@ -24,5 +25,16 @@ export class TransactionsController {
 
     return this.transactionsService.getTransactions(pageNumber, pageSize, filters);
   }
+
+  @Post('status-check')
+  async checkTransactionStatus(@Body('custom_order_id') customOrderId: string) {
+    return this.transactionsService.checkStatus(customOrderId);
+  }
+
+  @Post('webhook/status-update')
+  async webhookStatusUpdate(@Body() payload: any) {
+    return this.transactionsService.handleWebhookPayload(payload);
+  }
+
   
 }

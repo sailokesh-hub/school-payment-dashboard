@@ -14,12 +14,12 @@ const Navbar = () => {
           >
             Dashboard
           </Link>
-          {/* <Link
-            to="/school-details"
+          <Link
+            to="/custompayload"
             className="hover:text-teal-700 dark:hover:text-green-400 transition"
           >
-            School Details
-          </Link> */}
+            Custom Payload
+          </Link>
           <Link
             to="/transactions/status-check"
             className="hover:text-teal-700 dark:hover:text-green-400 transition"
